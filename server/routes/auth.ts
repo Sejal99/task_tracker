@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const express = require('express');
-const { authenticateJwt, SECRET } = require("../middleware/");
-const { User } = require("../db");
+import jwt from "jsonwebtoken";
+import express from 'express';
+import { authenticateJwt } from "../middleware/";
+import { User } from "../db";
 const router = express.Router();
 
   router.post('/signup', async (req, res) => {
@@ -12,15 +12,26 @@ const router = express.Router();
     } else {
       const newUser = new User({ username, password });
       await newUser.save();
+
+      if (!process.env.SECRET) {
+        return res.sendStatus(403);
+      }
+      
       const token = jwt.sign({ id: newUser._id }, process.env.SECRET, { expiresIn: '1h' });
       res.json({ message: 'User created successfully', token });
     }
   });
   
   router.post('/login', async (req, res) => {
+    
     const { username, password } = req.body;
     const user = await User.findOne({ username, password });
     if (user) {
+
+      if (!process.env.SECRET) {
+        return res.sendStatus(403);
+      }
+      
       const token = jwt.sign({ id: user._id }, process.env.SECRET, { expiresIn: '1h' });
       res.json({ message: 'Logged in successfully', token });
     } else {
@@ -29,7 +40,8 @@ const router = express.Router();
   });
 
     router.get('/me', authenticateJwt, async (req, res) => {
-      const user = await User.findOne({ _id: req.userId });
+      const userId=req.headers["userId"];
+      const user = await User.findOne({ _id: userId });
       if (user) {
         res.json({ username: user.username });
       } else {
@@ -37,4 +49,4 @@ const router = express.Router();
       }
     });
 
-  module.exports = router
+  export default router
