@@ -23,7 +23,7 @@ function App() {
         </RecoilRoot>
     );
 }
-//hard reloading prevention
+
 function InitState() {
     const setAuth = useSetRecoilState(authState);
     const navigate = useNavigate();
