@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/todo", todoRoutes);
+
 if(typeof process.env.MONGO_URI === "string"){
 mongoose.connect(process.env.MONGO_URI, {  dbName: "courses" })
 
