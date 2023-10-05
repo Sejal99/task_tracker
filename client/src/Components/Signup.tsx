@@ -17,20 +17,20 @@ const Signup = () => {
         const data = await response.json();
         if (data.token) {
             localStorage.setItem("token", data.token)
-            window.location = "/todos";
+            
         } else {
             alert("Error while signing up");
         }
     };
 
     return (
-        <div style={{justifyContent: "center", display: "flex", width: "100%"}}>
-            <div>
+        <div >
+            <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",gap:"10px"}}>
                 <h2>Signup</h2>
-                <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Username' />
-                <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
-                Already signed up? <Link to="/login">Login</Link>
-                <button onClick={handleSignup}>Signup</button>
+                <input style={{borderRadius:"10px",padding:"10px"}} type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Username' />
+                <input style={{borderRadius:"10px",padding:"10px"}}  type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
+               <div>Already signed up? <Link to="/login">Login</Link> here</div> 
+                <button style={{borderRadius:"10px",padding:"10px"}} onClick={handleSignup}>Signup</button>
             </div>
         </div>
     );
